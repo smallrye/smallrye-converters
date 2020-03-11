@@ -33,12 +33,14 @@
   <name>SmallRye: Converters Parent</name>
   <url>http://smallrye.io</url>
 
-  <!--
   <properties>
+    <version.eclipse.microprofile.config>1.4</version.eclipse.microprofile.config>
+
+    <!--
     <sonar.projectName>SmallRye Converters</sonar.projectName>
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../coverage/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    -->
   </properties>
-  -->
 
   <licenses>
     <license>
@@ -65,6 +67,11 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.eclipse.microprofile.config</groupId>
+        <artifactId>microprofile-config-api</artifactId>
+        <version>${version.eclipse.microprofile.config}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
