@@ -53,56 +53,56 @@ public final class Converters {
     static final Converter<String> STRING_CONVERTER = BuiltInConverter.of(0, newEmptyValueConverter(value -> value));
 
     static final Converter<Boolean> BOOLEAN_CONVERTER = BuiltInConverter.of(1, newTrimmingConverter(newEmptyValueConverter(
-        value -> Boolean.valueOf(
-            "TRUE".equalsIgnoreCase(value)
-            || "1".equalsIgnoreCase(value)
-            || "YES".equalsIgnoreCase(value)
-            || "Y".equalsIgnoreCase(value)
-            || "ON".equalsIgnoreCase(value)
-            || "JA".equalsIgnoreCase(value)
-            || "J".equalsIgnoreCase(value)
-            || "SI".equalsIgnoreCase(value)
-            || "SIM".equalsIgnoreCase(value)
-            || "OUI".equalsIgnoreCase(value)))));
+            value -> Boolean.valueOf(
+                    "TRUE".equalsIgnoreCase(value)
+                            || "1".equalsIgnoreCase(value)
+                            || "YES".equalsIgnoreCase(value)
+                            || "Y".equalsIgnoreCase(value)
+                            || "ON".equalsIgnoreCase(value)
+                            || "JA".equalsIgnoreCase(value)
+                            || "J".equalsIgnoreCase(value)
+                            || "SI".equalsIgnoreCase(value)
+                            || "SIM".equalsIgnoreCase(value)
+                            || "OUI".equalsIgnoreCase(value)))));
 
     static final Converter<Double> DOUBLE_CONVERTER = BuiltInConverter.of(2,
-                                                                          newTrimmingConverter(newEmptyValueConverter(Double::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(Double::valueOf)));
 
     static final Converter<Float> FLOAT_CONVERTER = BuiltInConverter.of(3,
-                                                                        newTrimmingConverter(newEmptyValueConverter(Float::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(Float::valueOf)));
 
     static final Converter<Long> LONG_CONVERTER = BuiltInConverter.of(4,
-                                                                      newTrimmingConverter(newEmptyValueConverter(Long::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(Long::valueOf)));
 
     static final Converter<Integer> INTEGER_CONVERTER = BuiltInConverter.of(5,
-                                                                            newTrimmingConverter(newEmptyValueConverter(Integer::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(Integer::valueOf)));
 
     static final Converter<Class<?>> CLASS_CONVERTER = BuiltInConverter.of(6,
-                                                                           newTrimmingConverter(newEmptyValueConverter(value -> {
-                                                                               try {
-                                                                                   return Class.forName(value, true, SecuritySupport.getContextClassLoader());
-                                                                               } catch (ClassNotFoundException e) {
-                                                                                   throw new IllegalArgumentException(e);
-                                                                               }
-                                                                           })));
+            newTrimmingConverter(newEmptyValueConverter(value -> {
+                try {
+                    return Class.forName(value, true, SecuritySupport.getContextClassLoader());
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            })));
 
     static final Converter<OptionalInt> OPTIONAL_INT_CONVERTER = BuiltInConverter.of(7,
-                                                                                     newOptionalIntConverter(INTEGER_CONVERTER));
+            newOptionalIntConverter(INTEGER_CONVERTER));
 
     static final Converter<OptionalLong> OPTIONAL_LONG_CONVERTER = BuiltInConverter.of(8,
-                                                                                       newOptionalLongConverter(LONG_CONVERTER));
+            newOptionalLongConverter(LONG_CONVERTER));
 
     static final Converter<OptionalDouble> OPTIONAL_DOUBLE_CONVERTER = BuiltInConverter.of(9,
-                                                                                           newOptionalDoubleConverter(DOUBLE_CONVERTER));
+            newOptionalDoubleConverter(DOUBLE_CONVERTER));
 
     static final Converter<InetAddress> INET_ADDRESS_CONVERTER = BuiltInConverter.of(10,
-                                                                                     newTrimmingConverter(newEmptyValueConverter(value -> {
-                                                                                         try {
-                                                                                             return InetAddress.getByName(value);
-                                                                                         } catch (UnknownHostException e) {
-                                                                                             throw new IllegalArgumentException(e);
-                                                                                         }
-                                                                                     })));
+            newTrimmingConverter(newEmptyValueConverter(value -> {
+                try {
+                    return InetAddress.getByName(value);
+                } catch (UnknownHostException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            })));
 
     static final Converter<Character> CHARACTER_CONVERTER = BuiltInConverter.of(11, newEmptyValueConverter(value -> {
         if (value.length() == 1) {
@@ -112,10 +112,10 @@ public final class Converters {
     }));
 
     static final Converter<Short> SHORT_CONVERTER = BuiltInConverter.of(12,
-                                                                        newTrimmingConverter(newEmptyValueConverter(Short::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(Short::valueOf)));
 
     static final Converter<Byte> BYTE_CONVERTER = BuiltInConverter.of(13,
-                                                                      newTrimmingConverter(newEmptyValueConverter(Byte::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(Byte::valueOf)));
 
     static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES;
 
@@ -219,7 +219,7 @@ public final class Converters {
      * @return the new converter (not {@code null})
      */
     public static <T, C extends Collection<T>> Converter<C> newCollectionConverter(Converter<? extends T> itemConverter,
-                                                                                   IntFunction<C> collectionFactory) {
+            IntFunction<C> collectionFactory) {
         return new CollectionConverter<>(itemConverter, collectionFactory);
     }
 
@@ -333,7 +333,7 @@ public final class Converters {
      * @return a range-validating converter
      */
     public static <T extends Comparable<T>> Converter<T> minimumValueConverter(Converter<? extends T> delegate, T minimumValue,
-                                                                               boolean inclusive) {
+            boolean inclusive) {
         return new RangeCheckConverter<>(Comparator.naturalOrder(), delegate, minimumValue, inclusive, null, false);
     }
 
@@ -349,7 +349,7 @@ public final class Converters {
      * @return a range-validating converter
      */
     public static <T> Converter<T> minimumValueConverter(Comparator<? super T> comparator, Converter<? extends T> delegate,
-                                                         T minimumValue, boolean inclusive) {
+            T minimumValue, boolean inclusive) {
         return new RangeCheckConverter<>(comparator, delegate, minimumValue, inclusive, null, false);
     }
 
@@ -365,7 +365,7 @@ public final class Converters {
      * @throws IllegalArgumentException if the given minimum value fails conversion
      */
     public static <T extends Comparable<T>> Converter<T> minimumValueStringConverter(Converter<? extends T> delegate,
-                                                                                     String minimumValue, boolean inclusive) {
+            String minimumValue, boolean inclusive) {
         return minimumValueConverter(delegate, delegate.convert(minimumValue), inclusive);
     }
 
@@ -382,7 +382,7 @@ public final class Converters {
      * @throws IllegalArgumentException if the given minimum value fails conversion
      */
     public static <T> Converter<T> minimumValueStringConverter(Comparator<? super T> comparator,
-                                                               Converter<? extends T> delegate, String minimumValue, boolean inclusive) {
+            Converter<? extends T> delegate, String minimumValue, boolean inclusive) {
         return minimumValueConverter(comparator, delegate, delegate.convert(minimumValue), inclusive);
     }
 
@@ -397,7 +397,7 @@ public final class Converters {
      * @return a range-validating converter
      */
     public static <T extends Comparable<T>> Converter<T> maximumValueConverter(Converter<? extends T> delegate, T maximumValue,
-                                                                               boolean inclusive) {
+            boolean inclusive) {
         return new RangeCheckConverter<>(Comparator.naturalOrder(), delegate, null, false, maximumValue, inclusive);
     }
 
@@ -413,7 +413,7 @@ public final class Converters {
      * @return a range-validating converter
      */
     public static <T> Converter<T> maximumValueConverter(Comparator<? super T> comparator, Converter<? extends T> delegate,
-                                                         T maximumValue, boolean inclusive) {
+            T maximumValue, boolean inclusive) {
         return new RangeCheckConverter<>(comparator, delegate, null, false, maximumValue, inclusive);
     }
 
@@ -429,7 +429,7 @@ public final class Converters {
      * @throws IllegalArgumentException if the given maximum value fails conversion
      */
     public static <T extends Comparable<T>> Converter<T> maximumValueStringConverter(Converter<? extends T> delegate,
-                                                                                     String maximumValue, boolean inclusive) {
+            String maximumValue, boolean inclusive) {
         return maximumValueConverter(delegate, delegate.convert(maximumValue), inclusive);
     }
 
@@ -446,7 +446,7 @@ public final class Converters {
      * @throws IllegalArgumentException if the given maximum value fails conversion
      */
     public static <T> Converter<T> maximumValueStringConverter(Comparator<? super T> comparator,
-                                                               Converter<? extends T> delegate, String maximumValue, boolean inclusive) {
+            Converter<? extends T> delegate, String maximumValue, boolean inclusive) {
         return maximumValueConverter(comparator, delegate, delegate.convert(maximumValue), inclusive);
     }
 
@@ -460,9 +460,9 @@ public final class Converters {
      * @return a range-validating converter
      */
     public static <T extends Comparable<T>> Converter<T> rangeValueConverter(Converter<? extends T> delegate, T minimumValue,
-                                                                             boolean minInclusive, T maximumValue, boolean maxInclusive) {
+            boolean minInclusive, T maximumValue, boolean maxInclusive) {
         return new RangeCheckConverter<>(Comparator.naturalOrder(), delegate, minimumValue, minInclusive, maximumValue,
-                                         maxInclusive);
+                maxInclusive);
     }
 
     /**
@@ -476,7 +476,7 @@ public final class Converters {
      * @return a range-validating converter
      */
     public static <T> Converter<T> rangeValueConverter(Comparator<? super T> comparator, Converter<? extends T> delegate,
-                                                       T minimumValue, boolean minInclusive, T maximumValue, boolean maxInclusive) {
+            T minimumValue, boolean minInclusive, T maximumValue, boolean maxInclusive) {
         return new RangeCheckConverter<>(comparator, delegate, minimumValue, minInclusive, maximumValue, maxInclusive);
     }
 
@@ -491,9 +491,9 @@ public final class Converters {
      * @throws IllegalArgumentException if the given minimum or maximum value fails conversion
      */
     public static <T extends Comparable<T>> Converter<T> rangeValueStringConverter(Converter<? extends T> delegate,
-                                                                                   String minimumValue, boolean minInclusive, String maximumValue, boolean maxInclusive) {
+            String minimumValue, boolean minInclusive, String maximumValue, boolean maxInclusive) {
         return rangeValueConverter(delegate, delegate.convert(minimumValue), minInclusive, delegate.convert(maximumValue),
-                                   maxInclusive);
+                maxInclusive);
     }
 
     /**
@@ -508,9 +508,9 @@ public final class Converters {
      * @throws IllegalArgumentException if the given minimum or maximum value fails conversion
      */
     public static <T> Converter<T> rangeValueStringConverter(Comparator<? super T> comparator, Converter<? extends T> delegate,
-                                                             String minimumValue, boolean minInclusive, String maximumValue, boolean maxInclusive) {
+            String minimumValue, boolean minInclusive, String maximumValue, boolean maxInclusive) {
         return rangeValueConverter(comparator, delegate, delegate.convert(minimumValue), minInclusive,
-                                   delegate.convert(maximumValue), maxInclusive);
+                delegate.convert(maximumValue), maxInclusive);
     }
 
     /**
@@ -557,7 +557,7 @@ public final class Converters {
                 return delegate.convert(value);
             }
             throw new IllegalArgumentException(
-                String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value does not match pattern", pattern, value));
+                    String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value does not match pattern", pattern, value));
         }
     }
 
@@ -573,7 +573,7 @@ public final class Converters {
         private final boolean maxInclusive;
 
         RangeCheckConverter(final Comparator<? super T> cmp, final Converter<? extends T> delegate, final T min,
-                            final boolean minInclusive, final T max, final boolean maxInclusive) {
+                final boolean minInclusive, final T max, final boolean maxInclusive) {
             this.comparator = cmp;
             this.delegate = delegate;
             this.min = min;
@@ -592,13 +592,13 @@ public final class Converters {
                 if (minInclusive) {
                     if (cmp < 0) {
                         throw new IllegalArgumentException(
-                            String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value must not be less than", min, value));
+                                String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value must not be less than", min, value));
                     }
                 } else {
                     if (cmp <= 0) {
                         throw new IllegalArgumentException(
-                            String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value must not be less than or equal to", max,
-                                          value));
+                                String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value must not be less than or equal to", max,
+                                        value));
                     }
                 }
             }
@@ -607,13 +607,13 @@ public final class Converters {
                 if (maxInclusive) {
                     if (cmp > 0) {
                         throw new IllegalArgumentException(
-                            String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value must not be greater than", max, value));
+                                String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value must not be greater than", max, value));
                     }
                 } else {
                     if (cmp >= 0) {
                         throw new IllegalArgumentException(
-                            String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value must not be greater than or equal to",
-                                          max, value));
+                                String.format(ILLEGAL_ARGUMENT_EXCEPTION_FORMAT, "Value must not be greater than or equal to",
+                                        max, value));
                     }
                 }
             }
@@ -623,7 +623,7 @@ public final class Converters {
         @SuppressWarnings("unchecked")
         Object readResolve() {
             return comparator != null ? this
-                                      : new RangeCheckConverter(Comparator.naturalOrder(), delegate, min, minInclusive, max, maxInclusive);
+                    : new RangeCheckConverter(Comparator.naturalOrder(), delegate, min, minInclusive, max, maxInclusive);
         }
     }
 
