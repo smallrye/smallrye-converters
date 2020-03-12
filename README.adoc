@@ -1,0 +1,17 @@
+image:https://github.com/smallrye/smallrye-converters/workflows/SmallRye%20Build/badge.svg?branch=master[link="https://github.com/smallrye/smallrye-converters/actions?query=workflow%3A%22SmallRye+Build%22"]
+image:https://img.shields.io/github/license/smallrye/smallrye-converters.svg["License", link="http://www.apache.org/licenses/LICENSE-2.0"]
+
+= SmallRye Converters
+
+== Instructions
+
+Compile and install this project:
+
+[source,bash]
+----
+mvn verify
+----
+
+=== Project structure
+
+=== Links
