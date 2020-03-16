@@ -1,7 +1,5 @@
 package io.smallrye.converters;
 
-import org.eclipse.microprofile.config.spi.Converter;
-
 /**
  * A converter which wraps another converter of the same type.
  */

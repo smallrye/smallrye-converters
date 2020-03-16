@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.eclipse.microprofile.config.spi.Converter;
 import org.junit.Test;
 
 public class ConvertersTestCase {

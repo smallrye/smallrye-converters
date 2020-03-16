@@ -4,8 +4,6 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.microprofile.config.spi.Converter;
-
 public class SmallRyeConverter {
     private static final SmallRyeConverter instance = new SmallRyeConverter();
 
