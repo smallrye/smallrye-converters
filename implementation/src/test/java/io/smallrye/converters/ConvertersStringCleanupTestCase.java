@@ -68,25 +68,33 @@ public class ConvertersStringCleanupTestCase<T> {
 
     @Test
     public void testSimple() {
-        final Converter<T> converter = SmallRyeConverter.getInstance().getConverter(type);
+        SmallRyeConverters converters = buildConverters();
+        final Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(string));
     }
 
     @Test
     public void testTrailingSpace() {
-        final Converter<T> converter = SmallRyeConverter.getInstance().getConverter(type);
+        SmallRyeConverters converters = buildConverters();
+        final Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(string + " "));
     }
 
     @Test
     public void testLeadingSpace() {
-        final Converter<T> converter = SmallRyeConverter.getInstance().getConverter(type);
+        SmallRyeConverters converters = buildConverters();
+        final Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(" " + string));
     }
 
     @Test
     public void testLeadingAndTrailingWhitespaces() {
-        final Converter<T> converter = SmallRyeConverter.getInstance().getConverter(type);
+        SmallRyeConverters converters = buildConverters();
+        final Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(" \t " + string + "\t\t "));
+    }
+
+    private static SmallRyeConverters buildConverters() {
+        return new SmallRyeConvertersBuilder().build();
     }
 }
