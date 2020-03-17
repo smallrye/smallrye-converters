@@ -1,6 +1,5 @@
 package io.smallrye.converters;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Optional;
@@ -8,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import io.smallrye.converters.api.Converter;
 
-public class SmallRyeConverters implements Serializable {
+public class SmallRyeConverters implements io.smallrye.converters.api.Converters {
     private final Map<Type, Converter<?>> converters;
     private final Map<Type, Converter<Optional<?>>> optionalConverters = new ConcurrentHashMap<>();
 
@@ -23,6 +22,7 @@ public class SmallRyeConverters implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> Converter<T> getConverter(Class<T> asType) {
         if (asType.isPrimitive()) {
             return (Converter<T>) getConverter(Converters.wrapPrimitiveType(asType));
@@ -40,8 +40,19 @@ public class SmallRyeConverters implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> Converter<Optional<T>> getOptionalConverter(Class<T> asType) {
         return optionalConverters.computeIfAbsent(asType,
                 clazz -> Converters.newOptionalConverter(getConverter((Class) clazz)));
+    }
+
+    @Override
+    public <T> T convertValue(final String value, final Class<T> asType) {
+        return getConverter(asType).convert(value);
+    }
+
+    @Override
+    public <T> T convertValue(final String value, final Converter<T> converter) {
+        return converter.convert(value);
     }
 }
