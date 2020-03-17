@@ -37,6 +37,8 @@ import java.util.function.IntFunction;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import io.smallrye.converters.api.Converter;
+
 /**
  * General converter utilities and constants.
  *

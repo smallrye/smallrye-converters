@@ -26,6 +26,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import io.smallrye.converters.api.Converter;
+
 @RunWith(Parameterized.class)
 public class ConvertersStringCleanupTestCase<T> {
 

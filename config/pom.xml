@@ -33,7 +33,6 @@
     <dependency>
       <groupId>io.smallrye.converters</groupId>
       <artifactId>smallrye-converters</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>

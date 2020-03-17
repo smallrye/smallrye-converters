@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.annotation.Priority;
 
+import io.smallrye.converters.api.Converter;
+
 public class SmallRyeConvertersBuilder {
     private Map<Type, ConverterWithPriority> converters = new HashMap<>();
 

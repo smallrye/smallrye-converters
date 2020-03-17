@@ -23,6 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import io.smallrye.converters.api.Converter;
+
 /**
  * Based on GERONIMO-6595 support implicit converters.
  *

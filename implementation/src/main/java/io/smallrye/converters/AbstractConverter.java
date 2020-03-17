@@ -2,6 +2,8 @@ package io.smallrye.converters;
 
 import java.io.Serializable;
 
+import io.smallrye.converters.api.Converter;
+
 /**
  * A basic converter.
  */

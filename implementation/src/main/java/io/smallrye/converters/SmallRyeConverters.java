@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.smallrye.converters.api.Converter;
+
 public class SmallRyeConverters implements Serializable {
     private final Map<Type, Converter<?>> converters;
     private final Map<Type, Converter<Optional<?>>> optionalConverters = new ConcurrentHashMap<>();

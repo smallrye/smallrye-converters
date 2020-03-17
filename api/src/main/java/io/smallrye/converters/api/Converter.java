@@ -1,4 +1,4 @@
-package io.smallrye.converters;
+package io.smallrye.converters.api;
 
 import java.io.Serializable;
 

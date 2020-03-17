@@ -15,6 +15,8 @@ import java.time.LocalDate;
 
 import org.junit.Test;
 
+import io.smallrye.converters.api.Converter;
+
 public class ImplicitConverterTestCase {
 
     @Test

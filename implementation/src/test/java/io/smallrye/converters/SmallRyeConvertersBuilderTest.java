@@ -7,6 +7,8 @@ import javax.annotation.Priority;
 
 import org.junit.Test;
 
+import io.smallrye.converters.api.Converter;
+
 public class SmallRyeConvertersBuilderTest {
     @Test
     public void withConverters() {

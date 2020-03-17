@@ -1,5 +1,7 @@
 package io.smallrye.converters;
 
+import io.smallrye.converters.api.Converter;
+
 /**
  * A converter which wraps another converter of the same type.
  */
