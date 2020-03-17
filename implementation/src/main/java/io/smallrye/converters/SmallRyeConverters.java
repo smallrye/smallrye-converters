@@ -1,22 +1,25 @@
 package io.smallrye.converters;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.microprofile.config.spi.Converter;
+import io.smallrye.converters.api.Converter;
 
-public class SmallRyeConverter {
-    private static final SmallRyeConverter instance = new SmallRyeConverter();
-
+public class SmallRyeConverters implements Serializable {
     private final Map<Type, Converter<?>> converters;
+    private final Map<Type, Converter<Optional<?>>> optionalConverters = new ConcurrentHashMap<>();
 
-    private SmallRyeConverter() {
+    SmallRyeConverters() {
         converters = new ConcurrentHashMap<>(Converters.ALL_CONVERTERS);
     }
 
-    public static SmallRyeConverter getInstance() {
-        return instance;
+    SmallRyeConverters(final SmallRyeConvertersBuilder smallRyeConvertersBuilder) {
+        this();
+        smallRyeConvertersBuilder.getConverters()
+                .forEach((type, converter) -> this.converters.put(type, converter.getConverter()));
     }
 
     @SuppressWarnings("unchecked")
@@ -34,5 +37,11 @@ public class SmallRyeConverter {
             }
             return conv;
         });
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> Converter<Optional<T>> getOptionalConverter(Class<T> asType) {
+        return optionalConverters.computeIfAbsent(asType,
+                clazz -> Converters.newOptionalConverter(getConverter((Class) clazz)));
     }
 }

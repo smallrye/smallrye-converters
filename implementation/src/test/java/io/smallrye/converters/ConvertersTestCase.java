@@ -29,8 +29,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.eclipse.microprofile.config.spi.Converter;
 import org.junit.Test;
+
+import io.smallrye.converters.api.Converter;
 
 public class ConvertersTestCase {
 

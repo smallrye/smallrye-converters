@@ -37,7 +37,7 @@ import java.util.function.IntFunction;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.microprofile.config.spi.Converter;
+import io.smallrye.converters.api.Converter;
 
 /**
  * General converter utilities and constants.

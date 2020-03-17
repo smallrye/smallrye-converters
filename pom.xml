@@ -62,7 +62,9 @@
   </scm>
 
   <modules>
+    <module>api</module>
     <module>implementation</module>
+    <module>config</module>
   </modules>
 
   <dependencyManagement>
@@ -71,6 +73,18 @@
         <groupId>org.eclipse.microprofile.config</groupId>
         <artifactId>microprofile-config-api</artifactId>
         <version>${version.eclipse.microprofile.config}</version>
+      </dependency>
+
+      <!-- Dependencies provided by the project -->
+      <dependency>
+        <groupId>io.smallrye.converters</groupId>
+        <artifactId>converters-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.smallrye.converters</groupId>
+        <artifactId>smallrye-converters</artifactId>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

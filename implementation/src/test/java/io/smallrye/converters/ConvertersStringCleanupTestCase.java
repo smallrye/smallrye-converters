@@ -22,10 +22,11 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 
-import org.eclipse.microprofile.config.spi.Converter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
+import io.smallrye.converters.api.Converter;
 
 @RunWith(Parameterized.class)
 public class ConvertersStringCleanupTestCase<T> {
@@ -69,25 +70,33 @@ public class ConvertersStringCleanupTestCase<T> {
 
     @Test
     public void testSimple() {
-        final Converter<T> converter = SmallRyeConverter.getInstance().getConverter(type);
+        SmallRyeConverters converters = buildConverters();
+        final Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(string));
     }
 
     @Test
     public void testTrailingSpace() {
-        final Converter<T> converter = SmallRyeConverter.getInstance().getConverter(type);
+        SmallRyeConverters converters = buildConverters();
+        final Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(string + " "));
     }
 
     @Test
     public void testLeadingSpace() {
-        final Converter<T> converter = SmallRyeConverter.getInstance().getConverter(type);
+        SmallRyeConverters converters = buildConverters();
+        final Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(" " + string));
     }
 
     @Test
     public void testLeadingAndTrailingWhitespaces() {
-        final Converter<T> converter = SmallRyeConverter.getInstance().getConverter(type);
+        SmallRyeConverters converters = buildConverters();
+        final Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(" \t " + string + "\t\t "));
+    }
+
+    private static SmallRyeConverters buildConverters() {
+        return new SmallRyeConvertersBuilder().build();
     }
 }

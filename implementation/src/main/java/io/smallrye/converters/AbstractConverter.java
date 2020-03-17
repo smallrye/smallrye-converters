@@ -2,7 +2,7 @@ package io.smallrye.converters;
 
 import java.io.Serializable;
 
-import org.eclipse.microprofile.config.spi.Converter;
+import io.smallrye.converters.api.Converter;
 
 /**
  * A basic converter.
