@@ -7,15 +7,28 @@ import java.util.Map;
 import javax.annotation.Priority;
 
 import io.smallrye.converters.api.Converter;
+import io.smallrye.converters.api.InputConverter;
+import io.smallrye.converters.api.OutputConverter;
 
 public class SmallRyeConvertersBuilder {
-    private Map<Type, ConverterWithPriority> converters = new HashMap<>();
+    private final Map<Type, ConverterWithPriority> converters = new HashMap<>();
+
+    private final Map<Type, InputConverter<?, ?>> inputConverters = new HashMap<>();
+    private final Map<Type, OutputConverter<?, ?>> outputConverters = new HashMap<>();
 
     public SmallRyeConvertersBuilder() {
     }
 
-    public Map<Type, ConverterWithPriority> getConverters() {
+    Map<Type, ConverterWithPriority> getConverters() {
         return converters;
+    }
+
+    Map<Type, InputConverter<?, ?>> getInputConverters() {
+        return inputConverters;
+    }
+
+    Map<Type, OutputConverter<?, ?>> getOutputConverters() {
+        return outputConverters;
     }
 
     public SmallRyeConverters build() {
@@ -24,7 +37,7 @@ public class SmallRyeConvertersBuilder {
 
     public SmallRyeConvertersBuilder withConverters(Converter<?>[] converters) {
         for (Converter<?> converter : converters) {
-            Type type = Converters.getConverterType(converter.getClass());
+            Type type = ConvertersUtils.getConverterType(converter.getClass());
             if (type == null) {
                 throw ConverterMessages.msg.unableToAddConverter(converter);
             }
@@ -40,6 +53,20 @@ public class SmallRyeConvertersBuilder {
 
     public <T> SmallRyeConvertersBuilder withConverter(Type type, int priority, Converter<T> converter) {
         addConverter(type, priority, converter, converters);
+        return this;
+    }
+
+    public <S, T> SmallRyeConvertersBuilder withInputConverter(
+            Class<S> type,
+            InputConverter<S, T> converter) {
+        this.inputConverters.put(type, converter);
+        return this;
+    }
+
+    public <S, T> SmallRyeConvertersBuilder withOutputConverter(
+            Class<T> type,
+            OutputConverter<S, T> converter) {
+        this.outputConverters.put(type, converter);
         return this;
     }
 
