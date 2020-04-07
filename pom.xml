@@ -36,10 +36,8 @@
   <properties>
     <version.eclipse.microprofile.config>1.4</version.eclipse.microprofile.config>
 
-    <!--
     <sonar.projectName>SmallRye Converters</sonar.projectName>
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../coverage/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    -->
   </properties>
 
   <licenses>
@@ -129,7 +127,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.6</version>
         <configuration>
           <gpgArguments>
             <arg>--pinentry-mode</arg>
@@ -140,8 +137,8 @@
     </plugins>
   </build>
 
-  <!--
   <profiles>
+    <!--
     <profile>
       <id>release</id>
       <activation>
@@ -153,6 +150,7 @@
         <module>release</module>
       </modules>
     </profile>
+    -->
     <profile>
       <id>coverage</id>
       <properties>
@@ -163,5 +161,4 @@
       </modules>
     </profile>
   </profiles>
-  -->
 </project>
