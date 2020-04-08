@@ -22,7 +22,7 @@
   <parent>
     <groupId>io.smallrye.converters</groupId>
     <artifactId>smallrye-converters-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
 
   <artifactId>converters-api</artifactId>
