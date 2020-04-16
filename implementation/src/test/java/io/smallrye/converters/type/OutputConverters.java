@@ -11,10 +11,10 @@ import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-public class InputOutputConverters {
+public class OutputConverters {
     @Test
     public void integer() {
-        final ConvertedType value = new ConvertedType("1");
+        final ConvertedType value = ConvertedType.of("1");
         assertEquals(1, new IntegerOutputConverter().convert(value).intValue());
     }
 
@@ -23,7 +23,7 @@ public class InputOutputConverters {
         final JsonObject jsonObject = Json.createObjectBuilder().add("street", "abc def").add("code", 1234)
                 .add("country", "ABC").build();
 
-        final ConvertedType value = new ConvertedType(jsonObject);
+        final ConvertedType value = ConvertedType.of(jsonObject);
         final Address address = new AddressOutputConverter().convert(value);
         assertEquals("abc def", address.getStreet());
         assertEquals(1234, address.getCode().intValue());
@@ -39,7 +39,7 @@ public class InputOutputConverters {
                 .build()
                 .toString();
 
-        final ConvertedType value = new ConvertedType(json);
+        final ConvertedType value = ConvertedType.of(json);
         final Address address = new AddressOutputConverter().convert(value);
         assertEquals("abc def", address.getStreet());
         assertEquals(1234, address.getCode().intValue());
@@ -50,7 +50,7 @@ public class InputOutputConverters {
     public void yaml() {
         final String yml = "street: abc def\n" + "code: 1234\n" + "country: ABC\n";
 
-        final ConvertedType value = new ConvertedType(yml);
+        final ConvertedType value = ConvertedType.of(yml);
         final OutputConverter<Address> outputConverter = new OutputConverter<Address>() {
             @Override
             public Address convert(final ConvertedType value) {
