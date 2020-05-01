@@ -26,8 +26,7 @@ public class SmallRyeConvertersBuilder {
         for (Converter<?> converter : converters) {
             Type type = Converters.getConverterType(converter.getClass());
             if (type == null) {
-                throw new IllegalStateException(
-                        "Can not add converter " + converter + " that is not parameterized with a type");
+                throw ConverterMessages.msg.unableToAddConverter(converter);
             }
             addConverter(type, getPriority(converter), converter, this.converters);
         }
