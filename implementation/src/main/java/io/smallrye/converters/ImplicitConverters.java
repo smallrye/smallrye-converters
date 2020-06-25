@@ -121,7 +121,7 @@ class ImplicitConverters {
             try {
                 return clazz.cast(method.invoke(null, value));
             } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new IllegalArgumentException(e);
+                throw ConverterMessages.msg.staticMethodConverterFailure(e);
             }
         }
 
@@ -168,7 +168,7 @@ class ImplicitConverters {
             try {
                 return ctor.newInstance(value);
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
-                throw new IllegalArgumentException(e);
+                throw ConverterMessages.msg.constructorConverterFailure(e);
             }
         }
 

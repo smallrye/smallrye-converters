@@ -33,7 +33,7 @@ public class SmallRyeConverters implements io.smallrye.converters.api.Converters
         return (Converter<T>) converters.computeIfAbsent(asType, clazz -> {
             final Converter<?> conv = ImplicitConverters.getConverter((Class<?>) clazz);
             if (conv == null) {
-                throw new IllegalArgumentException("No Converter registered for " + asType);
+                throw ConverterMessages.msg.noRegisteredConverter(asType);
             }
             return conv;
         });
