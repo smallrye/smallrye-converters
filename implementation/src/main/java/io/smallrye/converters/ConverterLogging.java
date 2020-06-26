@@ -14,4 +14,12 @@ public interface ConverterLogging extends BasicLogger {
     @LogMessage(level = Logger.Level.WARN)
     @Message(id = 1000, value = "Unable to get context classloader instance")
     void failedToRetrieveClassloader(@Cause Throwable cause);
+
+    @LogMessage(level = Logger.Level.WARN)
+    @Message(id = 1001, value = "Unable to get declared constructor for class %s with arguments %s")
+    void failedToRetrieveDeclaredConstructor(@Cause Throwable cause, String clazz, String paramTypes);
+
+    @LogMessage(level = Logger.Level.WARN)
+    @Message(id = 1002, value = "Unable to set accessible flag on %s")
+    void failedToSetAccessible(@Cause Throwable cause, String accessibleObject);
 }
