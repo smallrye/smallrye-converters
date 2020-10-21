@@ -63,16 +63,40 @@ public final class Converters {
                             || "OUI".equalsIgnoreCase(value)))));
 
     static final Converter<Double> DOUBLE_CONVERTER = BuiltInConverter.of(2,
-            newTrimmingConverter(newEmptyValueConverter(Double::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(value -> {
+                try {
+                    return Double.valueOf(value);
+                } catch (NumberFormatException nfe) {
+                    throw ConverterMessages.msg.doubleExpected(value);
+                }
+            })));
 
     static final Converter<Float> FLOAT_CONVERTER = BuiltInConverter.of(3,
-            newTrimmingConverter(newEmptyValueConverter(Float::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(value -> {
+                try {
+                    return Float.valueOf(value);
+                } catch (NumberFormatException nfe) {
+                    throw ConverterMessages.msg.floatExpected(value);
+                }
+            })));
 
     static final Converter<Long> LONG_CONVERTER = BuiltInConverter.of(4,
-            newTrimmingConverter(newEmptyValueConverter(Long::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(value -> {
+                try {
+                    return Long.valueOf(value);
+                } catch (NumberFormatException nfe) {
+                    throw ConverterMessages.msg.longExpected(value);
+                }
+            })));
 
     static final Converter<Integer> INTEGER_CONVERTER = BuiltInConverter.of(5,
-            newTrimmingConverter(newEmptyValueConverter(Integer::valueOf)));
+            newTrimmingConverter(newEmptyValueConverter(value -> {
+                try {
+                    return Integer.valueOf(value);
+                } catch (NumberFormatException nfe) {
+                    throw ConverterMessages.msg.integerExpected(value);
+                }
+            })));
 
     static final Converter<Class<?>> CLASS_CONVERTER = BuiltInConverter.of(6,
             newTrimmingConverter(newEmptyValueConverter(value -> {
