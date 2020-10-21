@@ -61,4 +61,16 @@ interface ConverterMessages {
 
     @Message(id = 16, value = "Can not add converter %s that is not parameterized with a type")
     IllegalStateException unableToAddConverter(Converter<?> converter);
+
+    @Message(id = 17, value = "Expected an integer value, got \"%s\"")
+    NumberFormatException integerExpected(String value);
+
+    @Message(id = 18, value = "Expected a long value, got \"%s\"")
+    NumberFormatException longExpected(String value);
+
+    @Message(id = 19, value = "Expected a double value, got \"%s\"")
+    NumberFormatException doubleExpected(String value);
+
+    @Message(id = 20, value = "Expected a float value, got \"%s\"")
+    NumberFormatException floatExpected(String value);
 }
