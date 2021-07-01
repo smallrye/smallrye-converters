@@ -24,14 +24,18 @@ import java.lang.reflect.Type;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.UUID;
 import java.util.function.IntFunction;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -127,7 +131,7 @@ public final class Converters {
 
     static final Converter<Character> CHARACTER_CONVERTER = BuiltInConverter.of(11, newEmptyValueConverter(value -> {
         if (value.length() == 1) {
-            return Character.valueOf(value.charAt(0));
+            return value.charAt(0);
         }
         throw ConverterMessages.msg.failedCharacterConversion(value);
     }));
@@ -137,6 +141,32 @@ public final class Converters {
 
     static final Converter<Byte> BYTE_CONVERTER = BuiltInConverter.of(13,
             newTrimmingConverter(newEmptyValueConverter(Byte::valueOf)));
+
+    static final Converter<UUID> UUID_CONVERTER = BuiltInConverter.of(14,
+            newTrimmingConverter(newEmptyValueConverter((s) -> {
+                try {
+                    return UUID.fromString(s);
+                } catch (IllegalArgumentException e) {
+                    throw ConverterMessages.msg.malformedUUID(e, s);
+                }
+            })));
+
+    static final Converter<Currency> CURRENCY_CONVERTER = BuiltInConverter.of(15,
+            newTrimmingConverter(newEmptyValueConverter((s) -> Currency.getInstance(s))));
+
+    static final Converter<BitSet> BITSET_CONVERTER = BuiltInConverter.of(16,
+            newTrimmingConverter(newTrimmingConverter((s) -> {
+                int len = s.length();
+                byte[] data = new byte[len / 2];
+                for (int i = 0; i < len; i += 2) {
+                    data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                            + Character.digit(s.charAt(i + 1), 16));
+                }
+                return BitSet.valueOf(data);
+            })));
+
+    static final Converter<Pattern> PATTERN_CONVERTER = BuiltInConverter.of(17,
+            newTrimmingConverter(newEmptyValueConverter(Pattern::compile)));
 
     static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES;
 
@@ -167,6 +197,14 @@ public final class Converters {
         ALL_CONVERTERS.put(Character.class, CHARACTER_CONVERTER);
 
         ALL_CONVERTERS.put(Byte.class, BYTE_CONVERTER);
+
+        ALL_CONVERTERS.put(UUID.class, UUID_CONVERTER);
+
+        ALL_CONVERTERS.put(Currency.class, CURRENCY_CONVERTER);
+
+        ALL_CONVERTERS.put(BitSet.class, BITSET_CONVERTER);
+
+        ALL_CONVERTERS.put(Pattern.class, PATTERN_CONVERTER);
 
         Map<Class<?>, Class<?>> primitiveTypes = new HashMap<>(9);
         primitiveTypes.put(byte.class, Byte.class);
@@ -258,6 +296,21 @@ public final class Converters {
             throw ConverterMessages.msg.notArrayType(arrayType.toString());
         }
         return new ArrayConverter<>(itemConverter, arrayType);
+    }
+
+    /**
+     * Get a converter that converts content of type {@code <key1>=<value1>;<key2>=<value2>...} into
+     * a {@code Map<K, V>} using the given key and value converters.
+     *
+     * @param keyConverter the converter used to convert the keys
+     * @param valueConverter the converter used to convert the values
+     * @param <K> the type of the keys
+     * @param <V> the type of the values
+     * @return the new converter (not {@code null})
+     */
+    public static <K, V> Converter<Map<K, V>> newMapConverter(Converter<? extends K> keyConverter,
+            Converter<? extends V> valueConverter) {
+        return new MapConverter<>(keyConverter, valueConverter);
     }
 
     /**
@@ -880,6 +933,14 @@ public final class Converters {
                     return SHORT_CONVERTER;
                 case 13:
                     return BYTE_CONVERTER;
+                case 14:
+                    return UUID_CONVERTER;
+                case 15:
+                    return CURRENCY_CONVERTER;
+                case 16:
+                    return BITSET_CONVERTER;
+                case 17:
+                    return PATTERN_CONVERTER;
                 default:
                     throw ConverterMessages.msg.unknownConverterId(id);
             }
@@ -925,7 +986,107 @@ public final class Converters {
         }
 
         public T convert(final String value) {
-            return value == null ? null : getDelegate().convert(value.trim());
+            if (value == null) {
+                throw ConverterMessages.msg.converterNullValue();
+            }
+            return getDelegate().convert(value.trim());
+        }
+    }
+
+    /**
+     * A converter for a Map knowing that the expected format is {@code <key1>=<value1>;<key2>=<value2>...}.
+     * <p>
+     * The special characters {@code =} and {@code ;} can be used respectively in the key and in the value
+     * if they are escaped with a backslash.
+     * <p>
+     * It will ignore properties whose key contains sub namespaces, in other words if the name of a property
+     * contains the special character {@code .} it will be ignored.
+     *
+     * @param <K> The type of the key
+     * @param <V> The type of the value
+     */
+    static class MapConverter<K, V> extends AbstractConverter<Map<K, V>> {
+        private static final long serialVersionUID = 4343545736186221103L;
+
+        /**
+         * The converter to use the for keys.
+         */
+        private final Converter<? extends K> keyConverter;
+        /**
+         * The converter to use the for values.
+         */
+        private final Converter<? extends V> valueConverter;
+
+        /**
+         * Construct a {@code MapConverter} with the given converters.
+         *
+         * @param keyConverter the converter to use the for keys
+         * @param valueConverter the converter to use the for values
+         */
+        MapConverter(Converter<? extends K> keyConverter, Converter<? extends V> valueConverter) {
+            this.keyConverter = keyConverter;
+            this.valueConverter = valueConverter;
+        }
+
+        @Override
+        public Map<K, V> convert(String value) throws IllegalArgumentException, NullPointerException {
+            if (value == null) {
+                return null;
+            }
+            final Map<K, V> map = new HashMap<>();
+            final StringBuilder currentLine = new StringBuilder(value.length());
+            int fromIndex = 0;
+            for (int idx; (idx = value.indexOf(';', fromIndex)) >= 0; fromIndex = idx + 1) {
+                if (value.charAt(idx - 1) == '\\') {
+                    // The line separator has been escaped
+                    currentLine.append(value, fromIndex, idx + 1);
+                    continue;
+                }
+                processLine(map, value, currentLine.append(value, fromIndex, idx).toString());
+                currentLine.delete(0, currentLine.length());
+            }
+            currentLine.append(value, fromIndex, value.length());
+            if (currentLine.length() > 0) {
+                processLine(map, value, currentLine.toString());
+            }
+            return map.isEmpty() ? null : map;
+        }
+
+        /**
+         * Converts the line into an entry and add it to the given map.
+         *
+         * @param map the map to which the extracted entries are added.
+         * @param value the original value to convert.
+         * @param rawLine the extracted line to convert into an entry.
+         * @throws NoSuchElementException if the line could not be converted into an entry or doesn't have the expected format.
+         */
+        private void processLine(Map<K, V> map, String value, String rawLine) {
+            final String line = rawLine.replace("\\;", ";");
+            for (int idx, fromIndex = 0; (idx = line.indexOf('=', fromIndex)) >= 0; fromIndex = idx + 1) {
+                if (line.charAt(idx - 1) == '\\') {
+                    // The key separator has been escaped
+                    continue;
+                }
+                processEntry(map, line.substring(0, idx).replace("\\=", "="), line.substring(idx + 1).replace("\\=", "="));
+                return;
+            }
+            throw ConverterMessages.msg.valueNotMatchMapFormat(value);
+        }
+
+        /**
+         * Converts the key/value pair into the expected format and add it to the given map. It will ignore
+         * keys with sub namespace.
+         *
+         * @param map the map to which the key/value pair is added.
+         * @param key the key of the key/value pair to add to the map
+         * @param value the value of the key/value pair to add to the map
+         */
+        private void processEntry(Map<K, V> map, String key, String value) {
+            if (key.indexOf('.') >= 0) {
+                // Ignore sub namespaces
+                return;
+            }
+            map.put(keyConverter.convert(key), valueConverter.convert(value));
         }
     }
 }

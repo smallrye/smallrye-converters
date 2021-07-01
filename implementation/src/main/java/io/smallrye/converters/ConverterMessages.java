@@ -1,6 +1,7 @@
 package io.smallrye.converters;
 
 import java.io.InvalidObjectException;
+import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.jboss.logging.Messages;
@@ -73,4 +74,13 @@ interface ConverterMessages {
 
     @Message(id = 20, value = "Expected a float value, got \"%s\"")
     NumberFormatException floatExpected(String value);
+
+    @Message(id = 21, value = "%s cannot be converted into a UUID")
+    IllegalArgumentException malformedUUID(@Cause Throwable cause, String malformedUUID);
+
+    @Message(id = 22, value = "The Converter API cannot convert a null value")
+    NullPointerException converterNullValue();
+
+    @Message(id = 23, value = "Value does not match the expected map format \"<key1>=<value1>;<key2>=<value2>...\" (value was \"%s\")")
+    NoSuchElementException valueNotMatchMapFormat(String value);
 }

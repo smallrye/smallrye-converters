@@ -1,15 +1,15 @@
 package io.smallrye.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import javax.annotation.Priority;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.smallrye.converters.api.Converter;
 
-public class SmallRyeConvertersBuilderTest {
+class SmallRyeConvertersBuilderTest {
     @Test
     public void withConverters() {
         final SmallRyeConverters converters = new SmallRyeConvertersBuilder()

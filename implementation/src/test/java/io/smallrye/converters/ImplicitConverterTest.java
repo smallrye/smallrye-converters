@@ -1,8 +1,7 @@
 package io.smallrye.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,14 +12,14 @@ import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.time.LocalDate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import io.smallrye.converters.api.Converter;
 
-public class ImplicitConverterTestCase {
-
+class ImplicitConverterTest {
     @Test
-    public void testImplicitURLConverter() {
+    public void implicitURLConverter() {
         final SmallRyeConverters converters = buildConverters();
         URL url = converters.getConverter(URL.class).convert("https://github.com/smallrye/smallrye-config/");
         assertNotNull(url);
@@ -30,8 +29,8 @@ public class ImplicitConverterTestCase {
     }
 
     @Test
-    public void testImplicitLocalDateConverter() {
-        final SmallRyeConverters converters = buildConverters();
+    public void implicitLocalDateConverter() {
+        SmallRyeConverters converters = buildConverters();
         LocalDate date = converters.getConverter(LocalDate.class).convert("2019-04-01");
         assertNotNull(date);
         assertEquals(2019, date.getYear());
@@ -39,28 +38,30 @@ public class ImplicitConverterTestCase {
         assertEquals(1, date.getDayOfMonth());
     }
 
-    private static SmallRyeConverters buildConverters() {
-        return new SmallRyeConvertersBuilder().build();
-    }
-
     @Test
-    public void testSerializationOfConstructorConverter() {
+    void serializationOfConstructorConverter() {
         Converter<File> converter = ImplicitConverters.getConverter(File.class);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try (ObjectOutputStream out = new ObjectOutputStream(byteArrayOutputStream)) {
             out.writeObject(converter);
         } catch (IOException ex) {
-            fail("Constructor converter should be serializable, but could not serialize it: " + ex);
+            Assertions.fail("Constructor converter should be serializable, but could not serialize it: " + ex);
         }
         Object readObject = null;
         try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()))) {
             readObject = in.readObject();
         } catch (IOException | ClassNotFoundException ex) {
-            fail("Constructor converter should be serializable, but could not deserialize a previously serialized instance: "
-                    + ex);
+            Assertions.fail(
+                    "Constructor converter should be serializable, but could not deserialize a previously serialized instance: "
+                            + ex);
         }
-        assertEquals("Converted values to have same file path", converter.convert("/bad/path").getPath(),
-                ((File) ((Converter) readObject).convert("/bad/path")).getPath());
+        assertEquals(converter.convert("/bad/path").getPath(),
+                ((File) ((Converter) readObject).convert("/bad/path")).getPath(),
+                "Converted values to have same file path");
+    }
+
+    private static SmallRyeConverters buildConverters() {
+        return new SmallRyeConvertersBuilder().build();
     }
 }

@@ -74,8 +74,7 @@ class ImplicitConverters {
         }
     }
 
-    private static <T> Converter<T> getConverterFromStaticMethod(
-            Class<? extends T> clazz, String methodName,
+    private static <T> Converter<T> getConverterFromStaticMethod(Class<? extends T> clazz, String methodName,
             Class<? super String> paramType) {
         try {
             final Method method = clazz.getMethod(methodName, paramType);
