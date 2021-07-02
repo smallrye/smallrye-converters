@@ -28,6 +28,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import io.smallrye.converters.api.Converter;
+import io.smallrye.converters.api.Converters;
+import io.smallrye.converters.api.ConvertersProvider;
 
 class ConvertersStringCleanupTest<T> {
     static Stream<Arguments> data() {
@@ -58,7 +60,7 @@ class ConvertersStringCleanupTest<T> {
     @ParameterizedTest(name = "{0} - {2}")
     @MethodSource("data")
     void simple(Class<T> type, T expected, String string) {
-        SmallRyeConverters converters = buildConverters();
+        Converters converters = ConvertersProvider.getConverters();
         Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(string));
     }
@@ -66,7 +68,7 @@ class ConvertersStringCleanupTest<T> {
     @ParameterizedTest(name = "{0} - {2}")
     @MethodSource("data")
     void trailingSpace(Class<T> type, T expected, String string) {
-        SmallRyeConverters converters = buildConverters();
+        Converters converters = ConvertersProvider.getConverters();
         Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(string + " "));
     }
@@ -74,7 +76,7 @@ class ConvertersStringCleanupTest<T> {
     @ParameterizedTest(name = "{0} - {2}")
     @MethodSource("data")
     void leadingSpace(Class<T> type, T expected, String string) {
-        SmallRyeConverters converters = buildConverters();
+        Converters converters = ConvertersProvider.getConverters();
         Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(" " + string));
     }
@@ -82,12 +84,8 @@ class ConvertersStringCleanupTest<T> {
     @ParameterizedTest(name = "{0} - {2}")
     @MethodSource("data")
     void leadingAndTrailingWhitespaces(Class<T> type, T expected, String string) {
-        SmallRyeConverters converters = buildConverters();
+        Converters converters = ConvertersProvider.getConverters();
         Converter<T> converter = converters.getConverter(type);
         assertEquals(expected, converter.convert(" \t " + string + "\t\t "));
-    }
-
-    private static SmallRyeConverters buildConverters() {
-        return new SmallRyeConvertersBuilder().build();
     }
 }

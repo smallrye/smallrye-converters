@@ -1,7 +1,6 @@
 package io.smallrye.converters.api;
 
-import java.io.Serializable;
-
-public interface Converter<T> extends Serializable {
+@FunctionalInterface
+public interface Converter<T> {
     T convert(String value);
 }

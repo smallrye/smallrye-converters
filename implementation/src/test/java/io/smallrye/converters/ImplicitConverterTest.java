@@ -19,8 +19,8 @@ import io.smallrye.converters.api.Converter;
 
 class ImplicitConverterTest {
     @Test
-    public void implicitURLConverter() {
-        final SmallRyeConverters converters = buildConverters();
+    void implicitURLConverter() {
+        SmallRyeConverters converters = new SmallRyeConvertersBuilder().build();
         URL url = converters.getConverter(URL.class).convert("https://github.com/smallrye/smallrye-config/");
         assertNotNull(url);
         assertEquals("https", url.getProtocol());
@@ -29,8 +29,8 @@ class ImplicitConverterTest {
     }
 
     @Test
-    public void implicitLocalDateConverter() {
-        SmallRyeConverters converters = buildConverters();
+    void implicitLocalDateConverter() {
+        SmallRyeConverters converters = new SmallRyeConvertersBuilder().build();
         LocalDate date = converters.getConverter(LocalDate.class).convert("2019-04-01");
         assertNotNull(date);
         assertEquals(2019, date.getYear());
@@ -61,7 +61,4 @@ class ImplicitConverterTest {
                 "Converted values to have same file path");
     }
 
-    private static SmallRyeConverters buildConverters() {
-        return new SmallRyeConvertersBuilder().build();
-    }
 }

@@ -47,8 +47,8 @@ import io.smallrye.converters.api.Converter;
  *
  * @author <a href="http://jmesnil.net/">Jeff Mesnil</a> (c) 2017 Red Hat inc.
  */
-public final class Converters {
-    private Converters() {
+public final class ConvertersUtils {
+    private ConvertersUtils() {
     }
 
     static final Converter<String> STRING_CONVERTER = BuiltInConverter.of(0, newEmptyValueConverter(value -> value));
