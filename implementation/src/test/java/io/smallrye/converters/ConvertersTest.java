@@ -15,13 +15,13 @@
  */
 package io.smallrye.converters;
 
-import static io.smallrye.converters.Converters.getImplicitConverter;
-import static io.smallrye.converters.Converters.maximumValueConverter;
-import static io.smallrye.converters.Converters.minimumValueConverter;
-import static io.smallrye.converters.Converters.newArrayConverter;
-import static io.smallrye.converters.Converters.newCollectionConverter;
-import static io.smallrye.converters.Converters.newEmptyValueConverter;
-import static io.smallrye.converters.Converters.newOptionalConverter;
+import static io.smallrye.converters.ConvertersUtils.getImplicitConverter;
+import static io.smallrye.converters.ConvertersUtils.maximumValueConverter;
+import static io.smallrye.converters.ConvertersUtils.minimumValueConverter;
+import static io.smallrye.converters.ConvertersUtils.newArrayConverter;
+import static io.smallrye.converters.ConvertersUtils.newCollectionConverter;
+import static io.smallrye.converters.ConvertersUtils.newEmptyValueConverter;
+import static io.smallrye.converters.ConvertersUtils.newOptionalConverter;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -196,25 +196,25 @@ class ConvertersTest {
     void empty() {
         SmallRyeConverters converters = new SmallRyeConvertersBuilder().build();
 
-        assertTrue(converters.convertValue("1234", OptionalInt.class).isPresent());
-        assertFalse(converters.convertValue("", OptionalInt.class).isPresent());
-        assertThrows(NullPointerException.class, () -> converters.convertValue(null, OptionalInt.class));
+        assertTrue(converters.convert("1234", OptionalInt.class).isPresent());
+        assertFalse(converters.convert("", OptionalInt.class).isPresent());
+        assertThrows(NullPointerException.class, () -> converters.convert(null, OptionalInt.class));
     }
 
     @Test
     void shortValue() {
         SmallRyeConverters converters = new SmallRyeConvertersBuilder().build();
         short expected = 2;
-        assertEquals(expected, (short) converters.convertValue("2", Short.class), "Unexpected value for short config");
-        assertEquals(expected, (short) converters.convertValue("2", Short.TYPE), "Unexpected value for short config");
+        assertEquals(expected, (short) converters.convert("2", Short.class), "Unexpected value for short config");
+        assertEquals(expected, (short) converters.convert("2", Short.TYPE), "Unexpected value for short config");
     }
 
     @Test
     void byteValue() {
         SmallRyeConverters converters = new SmallRyeConvertersBuilder().build();
         byte expected = 2;
-        assertEquals(expected, (byte) converters.convertValue("2", Byte.class), "Unexpected value for byte config");
-        assertEquals(expected, (byte) converters.convertValue("2", Byte.TYPE), "Unexpected value for byte config");
+        assertEquals(expected, (byte) converters.convert("2", Byte.class), "Unexpected value for byte config");
+        assertEquals(expected, (byte) converters.convert("2", Byte.TYPE), "Unexpected value for byte config");
     }
 
     @Test
@@ -225,8 +225,8 @@ class ConvertersTest {
 
         String value = Base64.getEncoder().encodeToString("bytes".getBytes());
 
-        assertEquals("Ynl0ZXM=", converters.convertValue(value, v -> v));
-        assertEquals("bytes", new String(converters.convertValue(value, byte[].class)));
+        assertEquals("Ynl0ZXM=", converters.convert(value, v -> v));
+        assertEquals("bytes", new String(converters.convert(value, byte[].class)));
     }
 
     @Test
@@ -235,7 +235,7 @@ class ConvertersTest {
 
         Currency expected = Currency.getInstance("GBP");
         assertEquals(expected.getCurrencyCode(),
-                converters.convertValue("GBP", Currency.class).getCurrencyCode(),
+                converters.convert("GBP", Currency.class).getCurrencyCode(),
                 "Unexpected value for byte config");
     }
 
@@ -248,7 +248,7 @@ class ConvertersTest {
         expected.set(3);
         expected.set(5);
         expected.set(7);
-        assertEquals(expected.toString(), converters.convertValue("AA", BitSet.class).toString(),
+        assertEquals(expected.toString(), converters.convert("AA", BitSet.class).toString(),
                 "Unexpected value for byte config");
     }
 
@@ -257,7 +257,7 @@ class ConvertersTest {
         SmallRyeConverters converters = new SmallRyeConvertersBuilder().build();
 
         Pattern expected = Pattern.compile("[0-9]");
-        assertEquals(expected.pattern(), converters.convertValue("[0-9]", Pattern.class).pattern(),
+        assertEquals(expected.pattern(), converters.convert("[0-9]", Pattern.class).pattern(),
                 "Unexpected value for pattern");
     }
 
