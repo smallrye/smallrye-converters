@@ -1,8 +1,8 @@
-:ci: https://github.com/smallrye/smallrye-config/actions?query=workflow%3A%22SmallRye+Build%22
-:sonar: https://sonarcloud.io/dashboard?id=smallrye_smallrye-converters
+:ci: https://github.com/smallrye/smallrye-converters/actions/workflows/build.yml
+:sonar: https://sonarcloud.io/dashboard?id=io.smallrye%3Asmallrye-converters
 
-image:https://github.com/smallrye/smallrye-converters/workflows/SmallRye%20Build/badge.svg?branch=main[link={ci}]
-image:https://sonarcloud.io/api/project_badges/measure?project=smallrye_smallrye-converters&metric=alert_status["Quality Gate Status", link={sonar}]
+image:https://github.com/smallrye/smallrye-converters/actions/workflows/build.yml/badge.svg?branch=main[link={ci}]
+image:https://sonarcloud.io/api/project_badges/measure?project=io.smallrye%3Asmallrye-converters&metric=alert_status["Quality Gate Status", link={sonar}]
 image:https://img.shields.io/github/license/smallrye/smallrye-converters.svg["License", link="http://www.apache.org/licenses/LICENSE-2.0"]
 image:https://img.shields.io/maven-central/v/io.smallrye.converters/smallrye-converters?color=green[]
 

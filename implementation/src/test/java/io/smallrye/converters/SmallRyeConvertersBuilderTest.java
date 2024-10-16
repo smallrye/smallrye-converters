@@ -3,7 +3,7 @@ package io.smallrye.converters;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 
 import org.junit.jupiter.api.Test;
 

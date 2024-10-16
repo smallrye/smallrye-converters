@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 
 import io.smallrye.converters.api.Converter;
 

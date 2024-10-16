@@ -22,7 +22,7 @@
   <parent>
     <groupId>io.smallrye</groupId>
     <artifactId>smallrye-parent</artifactId>
-    <version>35</version>
+    <version>46</version>
   </parent>
 
   <groupId>io.smallrye.converters</groupId>
@@ -34,9 +34,7 @@
   <url>http://smallrye.io</url>
 
   <properties>
-    <version.eclipse.microprofile.config>2.0</version.eclipse.microprofile.config>
-
-    <sonar.projectName>SmallRye Converters</sonar.projectName>
+    <version.smallrye.testing>2.3.1</version.smallrye.testing>
   </properties>
 
   <licenses>
@@ -65,6 +63,15 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Test Dependencies -->
+      <dependency>
+        <groupId>io.smallrye.testing</groupId>
+        <artifactId>smallrye-testing-bom</artifactId>
+        <version>${version.smallrye.testing}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+
       <!-- Dependencies provided by the project -->
       <dependency>
         <groupId>io.smallrye.converters</groupId>
@@ -113,6 +120,18 @@
       <modules>
         <module>coverage</module>
       </modules>
+    </profile>
+    <profile>
+      <id>sonar</id>
+      <properties>
+        <sonar.projectName>SmallRye Converters</sonar.projectName>
+        <sonar.projectKey>io.smallrye:smallrye-converters</sonar.projectKey>
+        <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.coverage.jacoco.xmlReportPaths>
+          ${maven.multiModuleProjectDirectory}/coverage/target/site/jacoco-aggregate/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+      </properties>
     </profile>
   </profiles>
 </project>
